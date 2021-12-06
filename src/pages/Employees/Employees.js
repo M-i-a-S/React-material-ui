@@ -5,7 +5,7 @@ import PageHeader from "../../components/PageHeader";
 import { makeStyles, Paper, TableCell } from "@material-ui/core";
 import useTable from "../../components/controls/useTable";
 import { InputAdornment, TableBody, TableRow, Toolbar } from "@mui/material";
-import * as EmployeeService from "../../services/EmployeeService";
+import * as employeeService from "../../services/EmployeeService";
 import Controls from "../../components/controls/Controls";
 import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
@@ -35,7 +35,7 @@ const headCells = [
 
 export default function Employees() {
   const classes = useStyles();
-  const [records, setRecords] = useState(EmployeeService.getAllEmployees());
+  const [records, setRecords] = useState(employeeService.getAllEmployees());
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -56,6 +56,13 @@ export default function Employees() {
           );
       },
     });
+  };
+
+  const addOrEdit = (employee, resetForm) => {
+    employeeService.insertEmployee(employee);
+    resetForm();
+    setOpenPopup(false);
+    setRecords(employeeService.getAllEmployees());
   };
   return (
     <>
@@ -101,8 +108,12 @@ export default function Employees() {
         </TblContainer>
         <TblPagination />
       </Paper>
-      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
-        {<EmployeeForm />}
+      <Popup
+        title="Employee Form"
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+      >
+        {<EmployeeForm addOrEdit={addOrEdit} />}
       </Popup>
     </>
   );
