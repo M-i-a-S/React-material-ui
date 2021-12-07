@@ -11,7 +11,6 @@ import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/controls/Popup";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -124,9 +123,6 @@ export default function Employees() {
                     }}
                   >
                     <EditOutlinedIcon fontSize="small" />
-                  </Controls.ActionButton>
-                  <Controls.ActionButton color="secondary">
-                    <CloseIcon fontSize="small" />
                   </Controls.ActionButton>
                 </TableCell>
               </TableRow>

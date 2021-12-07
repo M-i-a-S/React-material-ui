@@ -21,21 +21,6 @@ export default function Header() {
             <InputBase />
           </Grid>
           <Grid item sm></Grid>
-          <Grid item>
-            <IconButton>
-              <Badge badgeContent={4} color="primary">
-                <NotificationsNoneIcon />
-              </Badge>
-            </IconButton>
-            <IconButton>
-              <Badge badgeContent={8} color="secondary">
-                <ChatBubbleOutlineIcon />
-              </Badge>
-            </IconButton>
-            <IconButton>
-              <PowerSettingsNewIcon />
-            </IconButton>
-          </Grid>
         </Grid>
       </Toolbar>
     </AppBar>
