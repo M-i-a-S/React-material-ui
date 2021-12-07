@@ -10,6 +10,8 @@ import Controls from "../../components/controls/Controls";
 import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/controls/Popup";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -31,10 +33,12 @@ const headCells = [
   { id: "email", label: "Email Address" },
   { id: "mobile", label: "Mobile Number" },
   { id: "department", label: "Department" },
+  { id: "actions", label: "Actions ", disableSorting: true },
 ];
 
 export default function Employees() {
   const classes = useStyles();
+  const [recordForEdit, setRecordForEdit] = useState(null);
   const [records, setRecords] = useState(employeeService.getAllEmployees());
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -59,10 +63,17 @@ export default function Employees() {
   };
 
   const addOrEdit = (employee, resetForm) => {
-    employeeService.insertEmployee(employee);
+    if (employee.id === 0) employeeService.insertEmployee(employee);
+    else employeeService.updateEmployee(employee);
     resetForm();
+    setRecordForEdit(null);
     setOpenPopup(false);
     setRecords(employeeService.getAllEmployees());
+  };
+
+  const openInPopup = (item) => {
+    setRecordForEdit(item);
+    setOpenPopup(true);
   };
   return (
     <>
@@ -90,7 +101,10 @@ export default function Employees() {
             variant="outlined"
             startIcon={<AddIcon />}
             className={classes.newButton}
-            onClick={() => setOpenPopup(true)}
+            onClick={() => {
+              setOpenPopup(true);
+              setRecordForEdit(null);
+            }}
           />
         </Toolbar>
         <TblContainer>
@@ -102,6 +116,19 @@ export default function Employees() {
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.mobile}</TableCell>
                 <TableCell>{item.department}</TableCell>
+                <TableCell>
+                  <Controls.ActionButton
+                    color="primary"
+                    onClick={() => {
+                      openInPopup(item);
+                    }}
+                  >
+                    <EditOutlinedIcon fontSize="small" />
+                  </Controls.ActionButton>
+                  <Controls.ActionButton color="secondary">
+                    <CloseIcon fontSize="small" />
+                  </Controls.ActionButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -113,7 +140,7 @@ export default function Employees() {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        {<EmployeeForm addOrEdit={addOrEdit} />}
+        {<EmployeeForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />}
       </Popup>
     </>
   );
